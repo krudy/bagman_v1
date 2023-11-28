@@ -123,19 +123,19 @@ function createPoints(numPoints) {
       bestRoute = population.reduce((best, individual) => {
         return calcDistance(points, individual) < calcDistance(points, best) ? individual : best;
       });
-      console.log(`Generacja ${gen + 1}: Najlepsza odległość - ${calcDistance(points, bestRoute)}`);
+      headerResult.innerHTML += `Generacja ${gen + 1}: Najlepsza odległość - ${calcDistance(points, bestRoute)} \n`;
     }
     return bestRoute;
   }
   
   // Wywołanie algorytmu genetycznego
-  const numPoints = 5; // liczba miast
-  const popSize = 30; // rozmiar populacji
-  const generations = 4; // liczba pokoleń
+  const numPoints = 10; // liczba miast
+  const popSize = 100; // rozmiar populacji
+  const generations = 50; // liczba pokoleń
   const mutationRate = 0.015; // współczynnik mutacji
   
   const points = createPoints(numPoints);
   const bestRoute = geneticAlgorithm(points, popSize, generations, mutationRate);
-  console.log("Najlepsza trasa:", bestRoute);
-  console.log("Najlepsza odległość:", calcDistance(points, bestRoute));
+  headerResult2.innerHTML = `Najlepsza trasa:" ${bestRoute}`;
+  headerResult3.innerHTML = `Najlepsza odległość:", ${calcDistance(points, bestRoute)}`;
   
