@@ -1,35 +1,46 @@
-const headerResult = document.querySelector('.result');
-const headerResult2 = document.querySelector('.result2');
-const headerResult3 = document.querySelector('.result3');
 
 
   // Dane - tablica współrzędnych x i y
   const pointsArray = points;
-//   // Dane - tablica współrzędnych x i y
-//   const pointsArray = [
-//     { x: 50, y: 100 },
-//     { x: 150, y: 200 },
-//     { x: 250, y: 300 },
-//     // Dodaj więcej punktów według potrzeb
-//   ];
+
 
   // Pobierz element canvas z dokumentu HTML
   const canvas = document.getElementById('myCanvas');
   const ctx = canvas.getContext('2d');
 
-  // Funkcja do rysowania punktów na canvasie
-  function drawPoints() {
+  function drawPoints(pointsArray) {
     ctx.clearRect(0, 0, canvas.width, canvas.height); // Wyczyść canvas przed narysowaniem punktów
 
-    // Iteruj przez tablicę punktów i narysuj każdy punkt
-    pointsArray.forEach(point => {
+    // Rysowanie punktów
+    pointsArray.forEach((point, index) => {
       ctx.beginPath();
       ctx.arc(point.x, point.y, 5, 0, Math.PI * 2); // Rysuj punkt jako okrąg
       ctx.fillStyle = 'red'; // Ustaw kolor punktu (czerwony)
       ctx.fill();
       ctx.closePath();
+
+      // Rysowanie numerów punktów
+      ctx.font = '12px Arial';
+      ctx.fillStyle = 'black';
+      ctx.fillText(index, point.x - 5, point.y - 10); // Numeracja punktów
     });
+
   }
 
-  // Wywołaj funkcję do rysowania punktów
-  drawPoints();
+  function drawLines(pointsArray){
+  
+    // Rysowanie linii łączących punkty
+    ctx.beginPath();
+    ctx.moveTo(pointsArray[0].x, pointsArray[0].y);
+    for (let i = 1; i < pointsArray.length; i++) {
+      ctx.lineTo(pointsArray[i].x, pointsArray[i].y);
+    }
+    ctx.strokeStyle = 'blue'; // Kolor linii (niebieski)
+    ctx.stroke();
+    ctx.closePath();
+  }
+
+  // Wywołanie funkcji do rysowania punktów z numerami i połączonych linii
+  drawPoints(pointsArray);
+  drawLines(createOrderPoints(bestRoute,pointsArray));
+

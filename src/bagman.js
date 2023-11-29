@@ -1,3 +1,8 @@
+const headerResult = document.querySelector('.result');
+const headerResult2 = document.querySelector('.result2');
+const headerResult3 = document.querySelector('.result3');
+
+
 // Funkcja losująca z zakresu min-max ,włączając ekstrema
 function getRandomIntInclusive(min, max) {
     min = Math.ceil(min);
@@ -10,8 +15,9 @@ function createPoints(numPoints) {
     let points = [];
     for (let i = 0; i < numPoints; i++) {
       points.push({
-        x: getRandomIntInclusive(0,100),
-        y: getRandomIntInclusive(0,100)
+        id: i+1,  // id potrzebne do rysowania linii przez drawLines()
+        x: getRandomIntInclusive(0,800),
+        y: getRandomIntInclusive(0,800)
       });
     }
     console.log(points);
@@ -23,18 +29,32 @@ function createPoints(numPoints) {
   // Funkcja wykorzystuje wzrór na odległość Euklidesową
   function calcDistance(points, order) {
     let distance = 0;
-    //console.log(order);
-    for (let i = 0; i < order.length - 1; i++) {
-      let idx1 = order[i];
-      let idx2 = order[i + 1];
-      let city1 = points[idx1];
-      let city2 = points[idx2];
-      distance += Math.sqrt(Math.pow(city2.x - city1.x, 2) + Math.pow(city2.y - city1.y, 2));
-    }
+      for (let i = 0; i < order.length - 1; i++) {
+        let idx1 = order[i];
+        let idx2 = order[i + 1];
+        let city1 = points[idx1];
+        let city2 = points[idx2];
+        distance += Math.sqrt(Math.pow(city2.x - city1.x, 2) + Math.pow(city2.y - city1.y, 2));
+      }
+    
    
     return distance;
   }
-  
+
+  // Funkcja tworzy tablicę z punktami x,y na podstawie tablicy z kolejnościa miast order[]
+  function createOrderPoints(order,points){
+
+   let pointsByOrder = [];
+
+   for(let i = 0; i < order.length; i++){
+    let index = Number(order[i]);
+     pointsByOrder.push({
+      x: points[index].x,
+      y: points[index].y,
+     })
+   }
+    return pointsByOrder;
+  }  
   // Funkcja tworząca początkową populację tras
   function initialPopulation(popSize, numPoints) {
     let population = [];
@@ -46,7 +66,8 @@ function createPoints(numPoints) {
       shuffle(order); // Losowe ustawienie kolejności miast
       population.push(order);
     }
-    return population;
+    console.log(population);
+    return population; // tablica tras 
   }
   
   // Funkcja mieszająca kolejność elementów w tablicy
@@ -109,7 +130,7 @@ function createPoints(numPoints) {
   
   // Algorytm genetyczny rozwiązujący problem komiwojażera
   function geneticAlgorithm(points, popSize, generations, mutationRate) {
-    let population = initialPopulation(popSize, points.length);
+    let population = initialPopulation(popSize, points.length);  
     let bestRoute = null;
     for (let gen = 0; gen < generations; gen++) {
       let newPopulation = [];
@@ -123,18 +144,19 @@ function createPoints(numPoints) {
       bestRoute = population.reduce((best, individual) => {
         return calcDistance(points, individual) < calcDistance(points, best) ? individual : best;
       });
-      headerResult.innerHTML += `Generacja ${gen + 1}: Najlepsza odległość - ${calcDistance(points, bestRoute)} \n`;
+     headerResult.innerHTML += `Generacja ${gen + 1}: Najlepsza odległość - ${calcDistance(points, bestRoute)} \n`;
     }
     return bestRoute;
   }
   
   // Wywołanie algorytmu genetycznego
   const numPoints = 10; // liczba miast
-  const popSize = 100; // rozmiar populacji
-  const generations = 50; // liczba pokoleń
+  const popSize = 40; // rozmiar populacji
+  const generations = 20; // liczba pokoleń
   const mutationRate = 0.015; // współczynnik mutacji
   
   const points = createPoints(numPoints);
+  //drawPoints(points);
   const bestRoute = geneticAlgorithm(points, popSize, generations, mutationRate);
   headerResult2.innerHTML = `Najlepsza trasa:" ${bestRoute}`;
   headerResult3.innerHTML = `Najlepsza odległość:", ${calcDistance(points, bestRoute)}`;
