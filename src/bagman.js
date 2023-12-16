@@ -1,6 +1,8 @@
 const headerResult = document.querySelector('.result');
 const headerResult2 = document.querySelector('.result2');
 const headerResult3 = document.querySelector('.result3');
+const resultList = document.querySelector('.resultList');
+
 
 
 // Funkcja losująca z zakresu min-max ,włączając ekstrema
@@ -131,7 +133,8 @@ function createPoints(numPoints) {
   // Algorytm genetyczny rozwiązujący problem komiwojażera
   function geneticAlgorithm(points, popSize, generations, mutationRate) {
     let population = initialPopulation(popSize, points.length);  
-    let bestRoute = null;
+    let bestRoute = null; //najlepsz trasa (tablica miast)
+    let currentBestRoute = null; //zmienna na potrzeby wyświetlania (dystans)
     for (let gen = 0; gen < generations; gen++) {
       let newPopulation = [];
       for (let i = 0; i < popSize / 2; i++) {
@@ -144,20 +147,36 @@ function createPoints(numPoints) {
       bestRoute = population.reduce((best, individual) => {
         return calcDistance(points, individual) < calcDistance(points, best) ? individual : best;
       });
-     headerResult.innerHTML += `Generacja ${gen + 1}: Najlepsza odległość - ${calcDistance(points, bestRoute)} \n`;
+
+
+      // tworzy liste generacji i długości tras
+      if(gen === 0){
+        const newLi = document.createElement('li');
+        newLi.innerHTML += `Generacja ${gen + 1}: Najlepsza odległość - ${calcDistance(points, bestRoute)} \n`;
+        resultList.appendChild(newLi);
+        currentBestRoute = calcDistance(points, bestRoute);
+      }else if (calcDistance(points, bestRoute) < currentBestRoute){
+        const newLi = document.createElement('li');
+        newLi.innerHTML += `Generacja ${gen + 1}: Najlepsza odległość - ${calcDistance(points, bestRoute)} \n`;
+        resultList.appendChild(newLi);
+       currentBestRoute = calcDistance(points, bestRoute);
+     }
+
+      
     }
     return bestRoute;
   }
   
   // Wywołanie algorytmu genetycznego
   const numPoints = 10; // liczba miast
-  const popSize = 40; // rozmiar populacji
-  const generations = 20; // liczba pokoleń
+  const popSize = 100; // rozmiar populacji
+  const generations = 10000; // liczba pokoleń
   const mutationRate = 0.015; // współczynnik mutacji
   
   const points = createPoints(numPoints);
-  //drawPoints(points);
+
   const bestRoute = geneticAlgorithm(points, popSize, generations, mutationRate);
+  
   headerResult2.innerHTML = `Najlepsza trasa:" ${bestRoute}`;
   headerResult3.innerHTML = `Najlepsza odległość:", ${calcDistance(points, bestRoute)}`;
   
