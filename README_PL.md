@@ -1,10 +1,10 @@
 # bagman_v1
-genetic algorithm for solving the travelling salesman problem
 
 Cel:
 Program implementuje algorytm genetyczny w celu rozwiązania problemu komiwojażera. Problem ten polega na znalezieniu najkrótszej trasy, która odwiedza wszystkie miasta dokładnie raz i wraca do punktu wyjścia. Program może być wykorzystany np. do zaplanowania instalacji sieci internetiowej miedzy podanymi punktami. 
 
 Znaczenie zmiennych:
+
 headerResult, headerResult2, headerResult3, resultList: Zmienne przechowujące odniesienia do elementów HTML, gdzie będą wyświetlane wyniki.
 numPoints: Liczba miast.
 popSize: Rozmiar populacji w algorytmie genetycznym.
@@ -49,4 +49,4 @@ Wywołanie algorytmu genetycznego:
 Algorytm genetyczny jest uruchamiany z określonymi parametrami: liczba miast (numPoints), rozmiar populacji (popSize), liczba pokoleń (generations) i współczynnik mutacji (mutationRate). Następnie wynik, czyli najlepsza trasa, jest wyświetlany w określonych elementach HTML (headerResult2 i headerResult3).
 
 Podsumowanie:
-Kod implementuje algorytm genetyczny w celu rozwiązania problemu komiwojażera. Rozpoczyna od losowego generowania miast na płaszczyźnie, następnie iteracyjnie ewoluuje populację tras, wybierając najlepsze rozwiązania. Wyniki są wyświetlane na stronie internetowej w określonych elementach HTML.
+Kod implementuje algorytm genetyczny w celu rozwiązania problemu komiwojażera. Rozpoczyna od losowego generowania miast na płaszczyźnie, następnie iteracyjnie ewoluuje populację tras, wybierając najlepsze rozwiązania. Wyniki są wyświetlane na stronie internetowej w określonych elementach HTML lub za pośrednictwem frameworku electron po wpisaniu komenty "npm run start:electron" .
